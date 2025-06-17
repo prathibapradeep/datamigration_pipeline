@@ -20,4 +20,4 @@ jobs:
       - name: Set up Python path
         run: export PYTHONPATH="${PYTHONPATH}:$(pwd)/pipeline"
       - name: Run unit tests
-        run: pytest tests/test_validate.py
+        run: pytest
