@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE `datamigration-ct:ds_datamigration_ct.top_customers` AS
+CREATE OR REPLACE TABLE `datamigration-ct-463114.ds_datamigration_ct.mtbl_monthly_spend` AS
 WITH customer_ltv AS (
   SELECT
     customer_id,
@@ -6,7 +6,7 @@ WITH customer_ltv AS (
     RANK() OVER (ORDER BY SUM(amount) DESC) AS rank,
     COUNT(*) OVER () AS total_customers
   FROM
-    `b_datamigration-ct:ds_datamigration_ct.transactions`
+    `datamigration-ct-463114.ds_datamigration_ct.transactions`
   GROUP BY
     customer_id
 ),
