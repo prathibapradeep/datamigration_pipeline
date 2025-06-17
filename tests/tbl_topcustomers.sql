@@ -6,7 +6,7 @@ WITH customer_ltv AS (
     RANK() OVER (ORDER BY SUM(amount) DESC) AS rank,
     COUNT(*) OVER () AS total_customers
   FROM
-    `datamigration-ct:ds_datamigration_ct.transactions`
+    `b_datamigration-ct:ds_datamigration_ct.transactions`
   GROUP BY
     customer_id
 ),

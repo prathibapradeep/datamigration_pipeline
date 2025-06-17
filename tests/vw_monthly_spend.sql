@@ -4,5 +4,5 @@ SELECT
   FORMAT_TIMESTAMP('%Y-%m', transaction_date) AS month,
   SUM(amount) AS total_spend,
   AVG(amount) AS avg_spend
-FROM `datamigration-ct:ds_datamigration_ct.transactions`
+FROM `b_datamigration-ct:ds_datamigration_ct.transactions`
 GROUP BY customer_id, month;

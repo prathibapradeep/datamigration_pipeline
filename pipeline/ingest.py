@@ -4,10 +4,10 @@ from apache_beam.options.pipeline_options import PipelineOptions # type: ignore
 from pipeline.validate import parse_customer, parse_transaction
 
 def run():
-    options = PipelineOptions()
-    with beam.Pipeline(options=options) as p:
+  options = PipelineOptions()
+  with beam.Pipeline(options=options) as p:
         (p
-         | "ReadCustomers" >> beam.io.ReadFromText("customers.csv", skip_header_lines=1)
+         | "ReadCustomers" >> beam.io.ReadFromText("C:/datamigration_pipeline/pipeline/customers.csv", skip_header_lines=1)
          | "ParseCust" >> beam.Map(parse_customer)
          | "LogCust" >> beam.Map(print)
          | "ToBQcust" >> beam.io.WriteToBigQuery(
@@ -18,7 +18,7 @@ def run():
          ))
 
         (p
-         | "ReadTxns" >> beam.io.ReadFromText("transactions.csv", skip_header_lines=1)
+         | "ReadTxns" >> beam.io.ReadFromText("C:/datamigration_pipeline/pipeline/transactions.csv", skip_header_lines=1)
          | "ParseTxn" >> beam.Map(parse_transaction)
          | "LogTxn" >> beam.Map(print)
          | "ToBQtxn" >> beam.io.WriteToBigQuery(
