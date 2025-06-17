@@ -1,86 +1,106 @@
-# DATAMIGRATION_PIPELINE
-Data Migration using GCP & Beam
+# Customer Transaction Analysis with BigQuery and Dataflow
 
-**📂 Architecture Overview**: 
+## Overview
+This project presents a scalable and secure data pipeline prototype on Google Cloud Platform (GCP) for analyzing customer transaction behavior. Designed for a large financial institution migrating to the cloud, the pipeline ingests, transforms, and loads customer and transaction data for analytical insights
 
-GCS → Dataflow (Beam) → BigQuery.
+🎯 Business Objectives
+ - Track customer spending behavior over time
+ - Identify high-value customers based on lifetime transaction value
 
-**✅ Prerequisites:**
+##  Architecture Overview
 
-- Google Cloud SDK installed and authenticated.
-- Python 3.8+ and pip installed.
-- Enable APIs:
-- Dataflow
-- BigQuery
-- Cloud Storage
-- Required permissions on GCS and BigQuery.
 
-**⚙️ Setup Instructions**:
-  - Ensure GCP project with required APIs enabled
-  - Run Terraform to create infra
-  - Install Python dependencies
-  - Submit Dataflow job or run Beam locally
+### 🧱 Components
 
-**Assumptions**:
+| Layer              | Technology                     | Description |
+|--------------------|-------------------------------|-------------|
+| Source             | CSV Files                     | `customers.csv`, `transactions.csv` |
+| Storage            | Google Cloud Storage (GCS)    | Raw file storage, staging & temp locations |
+| Processing         | Apache Beam on Dataflow       | ETL: clean, transform, validate data |
+| Data Warehouse     | BigQuery                      | Analytics-ready tables and views |
+| Infrastructure     | Terraform                     | GCP resources provisioning |
+| DevOps             | GitHub Actions                | CI for testing transformation logic |
+### 🔄 Data Flow Diagram
+
+```text
+Local CSV Files
+    ↓
+Google Cloud Storage
+    ↓
+Apache Beam (Dataflow)
+    ↓
+Cleaned Tables in BigQuery
+    ↓
+SQL Views for Monthly Spend & Top Customers
+```
+
+## Setup Instructions:
+
+### 1. Prerequisites:
+
+- Google Cloud SDK installed and authenticated (Enable APIs).
+- IAM roles:
+    -Storage Admin
+    -BigQuery Admin
+    -Dataflow Developer
+    -Service Account User
+- Tools
+    - gcloud CLI 
+    - Python 3.8+ and pip installed.
+    - Terraform
+    - Git
+
+### 2. Execution Steps:
+
+1.  **Prepare the GCP Environment**
+    -   Create a project (e.g., `datamigration-ct`)
+    -   Enable required APIs
+    -   Set project and region
+    -   Assign IAM roles
+    -   Create a Cloud Storage bucket: `datamigration-ct`
+        
+2.  **Simulate Data & Upload**
+    -   Generate `customers.csv` and `transactions.csv`
+    -   Upload both to your GCS bucket
+        
+3.  **Create BigQuery Dataset & Tables**
+    -   Dataset: `ds_datamigration_ct`
+    -   Table: `customers`
+           -   Partitioned by `created_at`, clustered by `customer_id`
+    -   Table: `transactions`
+           -   Partitioned by `transaction_date`, clustered by `customer_id`
+ 
+4.  **Provision Infrastructure with Terraform**
+    -   Initialize Terraform
+    -   Apply to provision GCS and BigQuery resources
+        
+5.  **Run Apache Beam (Dataflow) Pipeline**
+    -   Install Python dependencies
+    -   Submit job to Dataflow or run locally with `DirectRunner`
+        
+6.  **Create Analytical Views in BigQuery**
+    -   Monthly spend per customer
+    -   Top 5% of customers by lifetime transaction value
+        
+7.  **Set Up CI with GitHub Actions**
+    -   Push code to GitHub
+    -   Include CI workflow in `.github/workflows/ci.yml`
+
+🛠️ **AdditionalNotes**:
+- Use --runner=DirectRunner for local development and testing
+- Partitioning and clustering improve query performance and cost.
+
+
+### Assumptions:
   - Input CSVs are clean and use consistent schema
   - Basic IAM roles suffice for prototype
   - Permissions: bucket reader + BigQuery data editor.
 
-**✅ Future Improvements**:
+
+
+
+### Future Improvements:
   - Add data quality checks with Deequ or Great Expectations
   - Add streaming ingestion with Pub/Sub.
   - Alerting and monitoring via Cloud Monitoring
   - Scale storage via partitioned/clustering in BQ tables and views.
-
-  
-# DETAILED STEPS
-
-**Step 1: Set Up GCP Environment**
-1. Create a GCP Project (Datamigration-CT datamigration-ct-463114)
-    - Enable API's
-    - Authenticate CLI
-    - Set the Project and Region
-    - IAM (Grant the necessary roles)
-2. Create Google Storage Bucket datamigration-ct
-
-**Step 2: Data Ingestion & Storage**
-
-1. Simulate Data (Create two CSV files)
-    - customers.csv
-    - transactions.csv
-2. Use GCP console to upload the above 2 files into the datamigration-ct bucket
-
-**Step 3: Create a Big Query dataset and table**
-
-1. Create a dataset ds_datamigration_ct
-2. Create a table customers
-    1. Partition by created_at
-    2. Cluster by customer_id
-3. Create a table transactions
-    1. Partition by transaction_date
-    2. Cluster by customer_id
-
-**Step 4: Deploy Infrastructure with Terraform**
-
-1. Initialize Terraform
-2. Apply Terraform to create Big Query dataset and GCS Bucket
-
-**Step 5: Run Apache Beam (Dataflow) Pipeline**
-1. Install Python dependencies
-2. Run pipeline on Dataflow
-
-**Step 6: Create Analytical Views in BigQuery**
-1. Monthly spend per customer view
-2.Top 5% customers by Lifetime value
-
-**Step 7: Run Tests & CI Pipeline (GitHub)**
-1. Push your code to GitHub
-2. GitHub Actions workflow (.github/workflows/ci.yml) runs on every push.
-It:
- -Installs dependencies
- -Runs unit tests from tests/test_validate.py
-
-⚙️ **Notes**:
-
-- Use a setup.py in your pipeline directory if your code has dependencies.
-- For a minimal local run during development, switch to --runner=DirectRunner.
