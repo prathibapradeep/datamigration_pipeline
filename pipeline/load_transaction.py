@@ -15,7 +15,7 @@ job_config = bigquery.LoadJobConfig(
     skip_leading_rows=1,
 )
 
-uri = "gs://b_datamigration_ct/transactions.csv"
+uri = "gs://b_datamigration-ct/transactions.csv"
 
 load_job = client.load_table_from_uri(
     uri, table_id, job_config=job_config

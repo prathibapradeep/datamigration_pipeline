@@ -10,12 +10,13 @@ job_config = bigquery.LoadJobConfig(
         bigquery.SchemaField("customer_id", "INTEGER"),
         bigquery.SchemaField("first_name", "STRING"),
         bigquery.SchemaField("last_name", "STRING"),
+        bigquery.SchemaField("email", "STRING"),
         bigquery.SchemaField("created_at", "DATE"),
     ],
     skip_leading_rows=1,
 )
 
-uri = "gs://b_datamigration_ct/customers.csv"
+uri = "gs://b_datamigration-ct/customers.csv"
 
 load_job = client.load_table_from_uri(
     uri, table_id, job_config=job_config
