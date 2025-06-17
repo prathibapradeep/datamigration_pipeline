@@ -1,5 +1,5 @@
 
-from validate import parse_customer, parse_transaction # type: ignore
+from pipeline.validate import parse_customer, parse_transaction  # type: ignore
 
 def test_parse_customer():
     rec = parse_customer("1,Jane,Doe,jane@example.com,2021-01-01")
