@@ -1,1 +1,4 @@
 *.exe
+misc/bq_schema.json
+misc/bq_schema.sql
+misc/constraint.sql

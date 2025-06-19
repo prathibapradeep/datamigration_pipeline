@@ -1,1 +1,0 @@
-customer_id:INTEGER,first_name:STRING,last_name:STRING,email:STRING,created_at:DATE'
