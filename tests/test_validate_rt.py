@@ -6,11 +6,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../p
 from validate import parse_customer, parse_transaction  # type: ignore
 
 
-# Setup BigQuery client (make sure GOOGLE_APPLICATION_CREDENTIALS is set in your env)
+# Setup BigQuery client 
 client = bigquery.Client()
 
 def test_customers_from_bq():
-    # Query your customer table - adjust your dataset and table name here
+    # Query the customer table
     query = """
     SELECT 
         CAST(customer_id AS STRING) || ',' || first_name || ',' || last_name || ',' || email || ',' || FORMAT_DATE('%Y-%m-%d', created_at) AS raw_line
@@ -30,7 +30,7 @@ def test_customers_from_bq():
 
 
 def test_transactions_from_bq():
-    # Query your transactions table - adjust dataset/table name here
+    # Query the transactions table 
     query = """
     SELECT 
         CAST(transaction_id AS STRING) || ',' || CAST(customer_id AS STRING) || ',' || CAST(amount AS STRING) || ',' || FORMAT_DATE('%Y-%m-%d', transaction_date) AS raw_line
