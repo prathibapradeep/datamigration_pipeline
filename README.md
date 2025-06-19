@@ -102,5 +102,4 @@ SQL Views for Monthly Spend & Top Customers
 ### Future Improvements:
   - Add data quality checks with Deequ or Great Expectations
   - Add streaming ingestion with Pub/Sub.
-  - Alerting and monitoring via Cloud Monitoring
-  - Scale storage via partitioned/clustering in BQ tables and views.
+  - Alerting and monitoring via Cloud Monitoring 
