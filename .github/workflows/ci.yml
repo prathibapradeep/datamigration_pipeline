@@ -1,3 +1,4 @@
+
 name: Python CI
 
 on: [push, pull_request]
@@ -5,20 +6,18 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      PYTHONPATH: ${{ github.workspace }}/pipeline
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: "3.9"
       - name: Install dependencies
-        run: pip install apache-beam[gcp] pytest -r pipeline/requirements.txt
-      - name: Authenticate to Google Cloud
         run: |
-          printf '%s' "${{ secrets.GCP_SA_KEY }}" > "${{ github.workspace }}/gcp-key.json"
-      - name: Set GOOGLE_APPLICATION_CREDENTIALS env var
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/gcp-key.json" >> $GITHUB_ENV
+          pip install apache-beam[gcp]
+          pip install pytest
+          pip install -r pipeline/requirements.txt
+      - name: Set up Python path
+        run: export PYTHONPATH="${PYTHONPATH}:$(pwd)/pipeline"
       - name: Run unit tests
-        run: pytest -v
+        run: pytest
