@@ -15,5 +15,9 @@ jobs:
           python-version: "3.9"
       - name: Install dependencies
         run: pip install apache-beam[gcp] pytest -r pipeline/requirements.txt
+      - name: Authenticate to Google Cloud
+        run: echo "${{ secrets.GCP_SA_KEY }}" > "${{ github.workspace }}/gcp-key.json"
+      - name: Set GOOGLE_APPLICATION_CREDENTIALS env var
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/gcp-key.json" >> $GITHUB_ENV
       - name: Run unit tests
         run: pytest -v
